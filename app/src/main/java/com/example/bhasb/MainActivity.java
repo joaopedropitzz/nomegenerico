@@ -46,5 +46,5 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         Log.d("ciclo_vida", "onStop: ");
     }
-    //comentario
+    //comentario legal
 }
