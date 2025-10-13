@@ -16,42 +16,24 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    ArrayList<String> nomes;
 
     ListView listView;
-    Button button;
-    EditText editTextText;
-    ArrayList<String> nomes;
-    String i;
+
+
+    PlanetaController planetaController;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         listView=findViewById(R.id.listview);
-        button = findViewById(R.id.button);
-        editTextText = findViewById(R.id.editTextText);
-        nomes = new ArrayList<String>();
-
-
-        ArrayAdapter<String> adapter= new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                nomes);
+        planetaController = new PlanetaController();
+        ArrayAdapter<String> adapter= new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, planetaController.getNomePlanetas());
         listView.setAdapter(adapter);
-        button.setOnClickListener(v ->{
-            nomes.add(editTextText.getText().toString());
-            adapter.notifyDataSetChanged();
-        });
-
-        listView.setOnItemLongClickListener((parent, view, position, id)->{
-            nomes.remove(position);
-            adapter.notifyDataSetChanged();
-            return true;
-        });
-
-
-
 
     }
 }
