@@ -1,6 +1,8 @@
 package com.example.bhasb;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -34,31 +36,31 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.buttonSalvar);
         editText = findViewById(R.id.editTextText);
         listView = findViewById(R.id.listView);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         db = openOrCreateDatabase("app_database", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS notas (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " titulo VARCHAR, txt TEXT);");
-
         carregarListagem();
-
         button.setOnClickListener(v -> {
             String titulo = editText.getText().toString();
-
             ContentValues cv = new ContentValues();
             cv.put("titulo", titulo);
-
             db.insert("notas", null, cv);
-
             carregarListagem();
+        });
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String titulo = (String) parent.getItemAtPosition(position);
+            Intent intent = new Intent(MainActivity.this, ExibeItem.class);
+            intent.putExtra("titulo", titulo);
+            startActivity(intent);
         });
     }
 
+    @SuppressLint("Range")
     private void carregarListagem() {
         Cursor cursor = db.rawQuery("SELECT * FROM notas", null);
         cursor.moveToFirst();
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 titulos
         );
+
 
         listView.setAdapter(titulosAdapter);
 
